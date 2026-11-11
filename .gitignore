@@ -1,0 +1,6 @@
+~$*
+*.tmp
+Thumbs.db
+desktop.ini
+# Word 文件只留在本機，不上傳到公開專案
+*.docx
