@@ -4,6 +4,13 @@
 <meta charset="utf-8">
 <meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#00703A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="息息相通">
 <title>息息相通｜RCC 以病人為中心的溝通平台</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;700;900&display=swap" rel="stylesheet">
@@ -887,7 +894,7 @@ document.addEventListener('click', e => {
       if (kind==='pain') { const it = st.painItem;
         const big = `${lab(it)}<br>${t[P()]}`;
         const tr = careDiff()? `${careText(it)}${st.care==='zh'?'，':' – '}${t[LI[st.care]]}` : '';
-        confirmSay({ic:'f'+i, big, tr, speak:`${lab(it)}，${t[P()]}`}); record(`${it.zh}：${t[0]}`, score);
+        confirmSay({ic:'f'+i, big, tr, speak:`${sayText(lab(it))}，${t[P()]}`}); record(`${it.zh}：${t[0]}`, score);
       } else { confirmSay({ic:'f'+i, big:t[P()], tr: careDiff()?t[LI[st.care]]:'', speak:t[P()]}); record(`喘：${t[0]}`, score); }
       break; }
     case 'cmp': { const c = CMP[+g]; confirmSay({ic:'lungs', big:c[P()], tr:careDiff()?c[LI[st.care]]:'', speak:c[P()]}); record(c[0]); break; }
