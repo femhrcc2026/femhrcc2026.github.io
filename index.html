@@ -170,6 +170,10 @@ body.night .ho-logo{background:#F7F4EC;border-radius:8px;padding:3px 6px}
 @media (min-width:760px){.hero{padding:16px 28px 30px}.ho-logo{height:40px}.ho-unit{font-size:1.4rem}}
 .soon{font-size:1rem;font-weight:700;line-height:1.35;color:#7A4100;background:#FFF0D4;border:2px solid #C9821F;border-radius:12px;padding:3px 8px}
 body.night .soon{color:#FFD9A0;background:#3A2A12;border-color:#C9821F}
+.mute-tip{display:flex;gap:10px;align-items:flex-start;font-size:1.05rem;line-height:1.45;color:#7A4100;background:#FFF0D4;border:2px solid #C9821F;border-radius:12px;padding:10px 12px;margin:0;text-align:left}
+.mute-tip b{font-size:1.15rem}
+.mute-tip .en{display:block;font-size:.95rem;opacity:.85}
+body.night .mute-tip{color:#FFD9A0;background:#3A2A12}
 .banner{font-size:1rem;color:var(--muted);text-align:center;background:var(--safe-bg);border-radius:10px;padding:6px 10px;margin:0}
 @media (min-width:760px){
   #app,.overlay{padding:24px 40px 28px}
@@ -575,6 +579,8 @@ function ttsSpeak(text, lang, uiOnly) {
   ut.onend = ut.onerror = () => setPlaying(false);
   speechSynthesis.speak(ut);
 }
+const isIOS = () => /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform==='MacIntel' && navigator.maxTouchPoints > 1);
+function muteTip(){ return isIOS() ? '<p class="mute-tip" role="note"><span aria-hidden="true" style="font-size:1.5rem;line-height:1">🔔</span><span><b>沒有聲音？請關閉靜音模式，並調高音量</b><br>iPhone／iPad 靜音時，語音朗讀不會出聲（客語錄音不受影響）。<span class="en">No sound? Turn off Silent Mode and turn up the volume.</span></span></p>' : ''; }
 function ttsWarn(){ return !('speechSynthesis' in window) ? '<p class="banner">這個瀏覽器不支援語音朗讀，請改用 Chrome 或 Safari 開啟</p>' : ''; }
 function diagText(){
   if (!('speechSynthesis' in window)) return '這個瀏覽器不支援語音朗讀。';
@@ -729,6 +735,7 @@ V.lang = () => {
   </header>
   <div class="title" style="gap:10px;margin-top:6px"><span style="color:var(--c-need)">${S(IC.spk).replace('<svg','<svg style="width:2.4rem;height:2.4rem;stroke:var(--c-need)"')}</span><h1>請選擇語言</h1></div>
   <p class="sub">Choose language · Pilih bahasa · Chọn ngôn ngữ</p>
+  ${muteTip()}
   <div class="grid lgrid">${langs.map(([k,a,b]) => `<button class="tile ${sel===k?'sel':''}" style="--cc:var(--c-need);min-height:7.5rem" data-a="pickLang" data-g="${k}"><span class="lb">${a}</span><span class="sm">${b}</span>${k==='tw'?'<span class="soon">待上架<br><span class="nw">目前先以</span><span class="nw">中文語音呈現</span></span>':''}</button>`).join('')}</div>
   ${sel ? `${isAudioPending()?'<p class="banner">台語語音待上架，目前先以中文語音呈現</p>':''}
   <button class="btn primary" style="min-height:90px;font-size:2rem" data-a="go" data-g="orient">${ic('check').replace('<svg','<svg style="stroke:#fff"')}<span>${u('start')}</span></button>` : ''}
@@ -832,7 +839,8 @@ V.helper = () => { const seg = (key, opts) => `<div class="seg">${opts.map(([v,t
   <p class="note" style="text-align:left;margin-top:8px">使用呼吸器或正在脫離訓練的病人，呼吸放鬆引導須經呼吸治療師確認適用後再開啟。</p></section>
   <section><h2>聲音測試</h2>
   <div class="seg"><button data-a="testTTS">測試語音朗讀</button><button data-a="testBeep">測試嗶聲</button></div>
-  <p class="note" id="diag" style="text-align:left;margin-top:8px">${diagText()}</p></section>
+  <p class="note" id="diag" style="text-align:left;margin-top:8px">${diagText()}</p>
+  <p class="note" style="text-align:left;margin-top:8px"><b>iPhone／iPad 沒有聲音？</b>靜音模式會讓語音朗讀（中文、台語、英文、印尼文、越南文）沒有聲音，客語錄音則不受影響。請把側邊靜音鍵撥開（看不到橘色），或在控制中心關閉靜音（有動作按鈕的機型可長按動作按鈕），並調高音量後再按「測試語音朗讀」。</p></section>
   <section><h2>語速</h2>${seg('rate',[[1,'一般'],[0.6,'慢速'],[0.45,'很慢']])}</section>
   <section><h2>本次紀錄（${st.records.length} 筆）</h2>${st.records.length?`<table><tr><th>時間</th><th>內容</th><th>分數</th></tr>${st.records.slice().reverse().map(r=>`<tr><td>${r.t}</td><td>${r.zh}</td><td>${r.score??''}</td></tr>`).join('')}</table>`:'<p class="note" style="text-align:left">尚無紀錄</p>'}
   <p class="note" style="text-align:left;margin-top:8px">紀錄只存在這台裝置，重新整理網頁即清空（Demo）</p></section>
